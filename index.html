@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-site-verification" content="qnUiWc74VmoVmh-XkruidNyKrF7101DrrTImqWvlqns" />
+  <title>ChinevaChat</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="screen active">
+      <div class="login-container">
+        <h2>Enter your phone number</h2>
+        <p>ChinevaChat will send an SMS to verify your number.</p>
+        <div class="phone-input-box">
+          <span>+91</span>
+          <input type="tel" id="phoneNumber" placeholder="mobile number" maxlength="10">
+        </div>
+        <button id="loginBtn" class="whatsapp-btn">Agree and Continue</button>
+      </div>
+    </div>
+
+    <!-- HOME SCREEN -->
+    <div id="homeScreen" class="screen">
+      <header class="header">
+        <div class="logo">ChinevaChat</div>
+        <div class="header-icons">
+          <span class="material-icons">camera_alt</span>
+          <span class="material-icons">search</span>
+          <span class="material-icons">more_vert</span>
+        </div>
+      </header>
+
+      <!-- WHATSAPP TABS -->
+      <nav class="tabs">
+        <span class="tab active" data-tab="chats">Chats</span>
+        <span class="tab" data-tab="status">Status</span>
+        <span class="tab" data-tab="calls">Calls</span>
+      </nav>
+
+      <!-- TAB CONTENTS -->
+      <div id="chatsTab" class="tab-content active">
+        <main id="chatList" class="chat-list">
+          <!-- Dynamic chats appear here -->
+        </main>
+        <button id="newChatBtn" class="fab">
+          <span class="material-icons">chat</span>
+        </button>
+      </div>
+
+      <div id="statusTab" class="tab-content">
+        <div class="status-section">
+          <div class="chat-item">
+            <div class="avatar">My</div>
+            <div class="chat-details">
+              <h4>My Status</h4>
+              <p>Tap to add status update</p>
+            </div>
+          </div>
+          <p class="section-title">Recent updates</p>
+          <div class="empty-notice">No recent updates</div>
+        </div>
+      </div>
+
+      <div id="callsTab" class="tab-content">
+        <div class="empty-notice" style="margin-top: 100px;">
+          <span class="material-icons" style="font-size: 48px; color: #667781;">lock</span>
+          <p style="margin-top: 10px;">Your personal calls are end-to-end encrypted</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SELECT CONTACT SCREEN (WhatsApp Style Select Contact Page) -->
+    <div id="contactScreen" class="screen">
+      <header class="chat-header">
+        <button id="backToHomeBtn" class="icon-btn"><span class="material-icons">arrow_back</span></button>
+        <div class="chat-user">
+          <h3>Select contact</h3>
+          <span id="contactCount">3 contacts</span>
+        </div>
+        <div class="header-icons" style="gap: 15px;">
+          <span class="material-icons">search</span>
+          <span class="material-icons">more_vert</span>
+        </div>
+      </header>
+      <div class="chat-list" id="allContactsList">
+        <!-- Pre-built phone contacts like real WhatsApp -->
+      </div>
+    </div>
+
+    <!-- CHAT SCREEN -->
+    <div id="chatScreen" class="screen">
+      <header class="chat-header">
+        <button id="backBtn" class="icon-btn"><span class="material-icons">arrow_back</span></button>
+        <div class="chat-user">
+          <div id="activeAvatar" class="small-avatar">A</div>
+          <div>
+            <h3 id="activeChatName">Name</h3>
+            <span id="onlineStatus">online</span>
+          </div>
+        </div>
+        <div class="header-icons" style="gap: 15px;">
+          <span class="material-icons">videocam</span>
+          <span class="material-icons">call</span>
+          <span class="material-icons">more_vert</span>
+        </div>
+      </header>
+
+      <div id="messagesContainer" class="messages wallpaper">
+        <!-- Messages appear here -->
+      </div>
+
+      <div class="message-input-bar">
+        <span class="material-icons">insert_emoticon</span>
+        <input type="text" id="messageInput" placeholder="Message">
+        <span class="material-icons">attach_file</span>
+        <span class="material-icons">photo_camera</span>
+        <button id="sendBtn"><span class="material-icons">send</span></button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
