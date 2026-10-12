@@ -1,13 +1,17 @@
-// Firebase Configuration (Public Demo Realtime Database)
+// Public Demo Realtime Database Configuration
 const firebaseConfig = {
     databaseURL: "https://chinevachat-default-rtdb.firebaseio.com/"
 };
 
-// Initialize Firebase
-if (!firebase.apps.length) {
+// Initialize Firebase safely
+if (typeof firebase !== 'undefined' && !firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
-const db = firebase.database();
+
+let db = null;
+if (typeof firebase !== 'undefined') {
+    db = firebase.database();
+}
 
 let currentUser = "";
 let currentRoom = "";
@@ -18,48 +22,56 @@ document.addEventListener("DOMContentLoaded", () => {
     const msgInput = document.getElementById("message-input");
     const logoutBtn = document.getElementById("logout-btn");
 
-    startBtn.onclick = () => {
-        const username = document.getElementById("username-input").value.trim();
-        const room = document.getElementById("room-input").value.trim() || "main-room";
+    if (startBtn) {
+        startBtn.onclick = () => {
+            const username = document.getElementById("username-input").value.trim();
+            const room = document.getElementById("room-input").value.trim() || "main-room";
 
-        if (!username) {
-            alert("Kripya apna naam bharein!");
-            return;
-        }
+            if (!username) {
+                alert("Kripya apna naam bharein!");
+                return;
+            }
 
-        currentUser = username;
-        currentRoom = room;
+            currentUser = username;
+            currentRoom = room;
 
-        document.getElementById("my-display-name").innerText = `User: ${currentUser}`;
-        document.getElementById("room-display-name").innerText = `Room: ${currentRoom}`;
-        document.getElementById("chat-avatar").src = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(currentUser)}`;
+            document.getElementById("my-display-name").innerText = `User: ${currentUser}`;
+            document.getElementById("room-display-name").innerText = `Room: ${currentRoom}`;
+            document.getElementById("chat-avatar").src = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(currentUser)}`;
 
-        document.getElementById("login-screen").classList.remove("active");
-        document.getElementById("chat-screen").classList.add("active");
+            document.getElementById("login-screen").classList.remove("active");
+            document.getElementById("chat-screen").classList.add("active");
 
-        listenForMessages();
-    };
+            listenForMessages();
+        };
+    }
 
-    sendBtn.onclick = () => {
-        const text = msgInput.value.trim();
-        if (text !== "") {
-            sendMessage(text);
-            msgInput.value = "";
-        }
-    };
+    if (sendBtn) {
+        sendBtn.onclick = () => {
+            const text = msgInput.value.trim();
+            if (text !== "") {
+                sendMessage(text);
+                msgInput.value = "";
+            }
+        };
+    }
 
-    msgInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-            sendBtn.click();
-        }
-    });
+    if (msgInput) {
+        msgInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                sendBtn.click();
+            }
+        });
+    }
 
-    logoutBtn.onclick = () => {
-        location.reload();
-    };
+    if (logoutBtn) {
+        logoutBtn.onclick = () => {
+            location.reload();
+        };
+    }
 });
 
-// Send Message to Firebase Realtime Database
+// Send Message
 function sendMessage(text) {
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const msgData = {
@@ -69,25 +81,33 @@ function sendMessage(text) {
         timestamp: Date.now()
     };
 
-    db.ref("rooms/" + currentRoom).push(msgData);
+    if (db) {
+        db.ref("rooms/" + currentRoom).push(msgData);
+    } else {
+        renderMessage(msgData);
+    }
 }
 
-// Listen for Realtime Messages from Firebase
+// Listen for Realtime Messages
 function listenForMessages() {
     const chatBody = document.getElementById("chat-body");
+    if (!chatBody) return;
     chatBody.innerHTML = "";
 
-    db.ref("rooms/" + currentRoom).on("child_added", (snapshot) => {
-        const data = snapshot.val();
-        renderMessage(data);
-    });
+    if (db) {
+        db.ref("rooms/" + currentRoom).on("child_added", (snapshot) => {
+            const data = snapshot.val();
+            renderMessage(data);
+        });
+    }
 }
 
 // Render Message
 function renderMessage(data) {
     const chatBody = document.getElementById("chat-body");
+    if (!chatBody) return;
+
     const msgDiv = document.createElement("div");
-    
     const isMe = data.sender === currentUser;
     msgDiv.className = `msg ${isMe ? 'sent' : 'received'}`;
 
